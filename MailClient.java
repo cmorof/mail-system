@@ -11,6 +11,14 @@ public class MailClient
     private MailServer server;
     // The user running this client.
     private String user;
+    // The state on/off of the automatic message.
+    private boolean state;
+    // The addressee of the automatic message.
+    private String newTo;
+    // The subject of the automatic message.
+    private String newSubject;
+    // The message of the automatic message.
+    private String newMessage;
 
     /**
      * Create a mail client run by user and attached to the given server.
@@ -19,6 +27,7 @@ public class MailClient
     {
         this.server = server;
         this.user = user;
+        state = false;
     }
 
     /**
@@ -26,6 +35,12 @@ public class MailClient
      */
     public MailItem getNextMailItem()
     {
+        if (state == true)
+        {
+            MailItem item = new MailItem(user, newTo, newSubject, newMessage);
+            newTo = item.getFrom();
+            server.post(item);
+        }
         return server.getNextMailItem(user);
     }
 
@@ -59,5 +74,12 @@ public class MailClient
     public int numberOfMails()
     {
         return server.howManyMailItems(user);
+    }
+
+    public void setAutomaticReply(String newSubject, String newMessage, boolean activate)
+    {
+        this.newSubject = newSubject;
+        this.newMessage = newMessage;
+        state = activate;
     }
 }
