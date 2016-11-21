@@ -13,8 +13,6 @@ public class MailClient
     private String user;
     // The state on/off of the automatic message.
     private boolean state;
-    // The addressee of the automatic message.
-    private String newTo;
     // The subject of the automatic message.
     private String newSubject;
     // The message of the automatic message.
@@ -28,6 +26,8 @@ public class MailClient
         this.server = server;
         this.user = user;
         state = false;
+        newSubject = "";
+        newMessage ="";
     }
 
     /**
@@ -35,11 +35,11 @@ public class MailClient
      */
     public MailItem getNextMailItem()
     {
-        if (state == true)
+        MailItem item = server.getNextMailItem(user);
+        if (state && item != null)
         {
-            MailItem item = new MailItem(user, newTo, newSubject, newMessage);
-            newTo = item.getFrom();
-            server.post(item);
+            MailItem email = new MailItem(user, item.getFrom(), newSubject, newMessage);
+            server.post(email);
         }
         return server.getNextMailItem(user);
     }
@@ -76,10 +76,10 @@ public class MailClient
         return server.howManyMailItems(user);
     }
 
-    public void setAutomaticReply(String newSubject, String newMessage, boolean activate)
+    public void setAutomaticReply(String subjectAuto, String messageAuto, boolean activate)
     {
-        this.newSubject = newSubject;
-        this.newMessage = newMessage;
+        newSubject = subjectAuto;
+        newMessage = messageAuto;
         state = activate;
     }
 }
