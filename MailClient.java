@@ -76,16 +76,11 @@ public class MailClient
         return server.howManyMailItems(user);
     }
 
-    public void setAutomaticReply(String subjectAuto, String messageAuto, boolean activate)
+    public void setAutomaticReply(String subjectAuto, String messageAuto)
     {
         newSubject = subjectAuto;
         newMessage = messageAuto;
         
-        if (state){
-            state = false;
-        }
-        else {
-            state = true;
-        }
+        state = !state;
     }
 }
