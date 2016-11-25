@@ -38,10 +38,10 @@ public class MailClient
         MailItem item = server.getNextMailItem(user);
         if (state && item != null)
         {
-            MailItem email = new MailItem(user, item.getFrom(), newSubject, newMessage);
-            server.post(email);
+            sendMailItem(item.getFrom(), newSubject, newMessage);
         }
-        return server.getNextMailItem(user);
+
+        return item;
     }
 
     /**
@@ -50,7 +50,8 @@ public class MailClient
      */
     public void printNextMailItem()
     {
-        MailItem item = server.getNextMailItem(user);
+        MailItem item = getNextMailItem();
+        
         if(item == null) {
             System.out.println("No new mail.");
         }
@@ -82,5 +83,10 @@ public class MailClient
         newMessage = messageAuto;
         
         state = !state;
+    }
+    
+    public void printLastMail()
+    {
+        
     }
 }
