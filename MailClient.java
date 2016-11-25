@@ -80,6 +80,12 @@ public class MailClient
     {
         newSubject = subjectAuto;
         newMessage = messageAuto;
-        state = activate;
+        
+        if (state){
+            state = false;
+        }
+        else {
+            state = true;
+        }
     }
 }
