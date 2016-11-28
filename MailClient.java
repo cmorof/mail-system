@@ -17,6 +17,8 @@ public class MailClient
     private String newSubject;
     // The message of the automatic message.
     private String newMessage;
+    
+    private MailItem lastMail;
 
     /**
      * Create a mail client run by user and attached to the given server.
@@ -36,11 +38,15 @@ public class MailClient
     public MailItem getNextMailItem()
     {
         MailItem item = server.getNextMailItem(user);
+        if (item != null)
+        {
+            lastMail = item;
+        }
+        
         if (state && item != null)
         {
             sendMailItem(item.getFrom(), newSubject, newMessage);
         }
-
         return item;
     }
 
@@ -51,7 +57,6 @@ public class MailClient
     public void printNextMailItem()
     {
         MailItem item = getNextMailItem();
-        
         if(item == null) {
             System.out.println("No new mail.");
         }
@@ -87,6 +92,11 @@ public class MailClient
     
     public void printLastMail()
     {
-        
+        if (lastMail == null){
+            System.out.println("No new mail.");
+        }
+        else{
+            lastMail.print();
+        }
     }
 }
