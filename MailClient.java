@@ -40,7 +40,14 @@ public class MailClient
         MailItem item = server.getNextMailItem(user);
         if (item != null)
         {
-            lastMail = item;
+            if(item.getMessage().contains("regalo") || 
+               item.getMessage().contains("promocion"))
+         	{
+         		item = null;
+			}
+			else{
+			    lastMail = item;
+			 }
         }
         
         if (state && item != null)
@@ -61,6 +68,10 @@ public class MailClient
             System.out.println("No new mail.");
         }
         else {
+            if (item.getMessage().contains("regalo") || item.getMessage().contains("promoción"))
+            {
+                System.out.println("El email que has recibido es spam");
+            }
             item.print();
         }
     }
